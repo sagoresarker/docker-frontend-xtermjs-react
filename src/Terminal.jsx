@@ -38,19 +38,27 @@ const MyTerminal = () => {
 
     socket.onmessage = (event) => {
       const message = event.data;
-      term.write(`\r\n${message}\r\n`);
-      term.write('\x1b[34mPoridhi Web Shell $$ \x1b[0m');
+
+      if (message === '__END__') {
+        term.write('\x1b[34mPoridhi Web Shell $$ \x1b[0m');
+      } else {
+        term.write(`\r\n${message}\r\n`);
+      }
     };
 
     term.onKey(({ key, domEvent }) => {
       if (domEvent.keyCode === 13) { // Enter key
         term.write('\r\n');
-        entries.push(currLine);
+        if (currLine.trim() === 'clear') {
+          term.clear();
+        } else {
+          entries.push(currLine);
         //term.write(`You entered: ${currLine}\r\n`);
 
         // Send the entered command to the server via WebSocket
         socket.send(currLine);
         //socket.send(currLine);
+        }
 
         currLine = '';
         term.write('\x1b[34mPoridhi Web Shell $$ \x1b[0m');
