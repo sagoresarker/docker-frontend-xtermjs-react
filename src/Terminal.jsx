@@ -22,7 +22,7 @@ const MyTerminal = () => {
 
     socket.onmessage = (event) => {
       const message = event.data;
-      term.write(`\r\nServer Response: ${message}\r\n`);
+      term.write(`\r\n${message}\r\n`);
       term.write('Poridhi Web Shell $$ ');
     };
 
